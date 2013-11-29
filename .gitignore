@@ -4,3 +4,18 @@
 *.jar
 *.war
 *.ear
+
+# eclipse settings
+.classpath
+.project
+.settings/
+
+# Java class files
+*.class
+ 
+# generated files
+bin/
+gen/
+
+# my setting
+.metadata

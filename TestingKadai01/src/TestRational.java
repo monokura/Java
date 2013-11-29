@@ -1,5 +1,5 @@
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class TestRational {
 		Rational r2 = new Rational(2);
 		Rational r3 = new Rational(-3);
 		Rational r4 = new Rational(2, 3);
-		
+
 		assertThat(r1.getNum(), is(0L));
 		assertThat(r1.getDen(), is(1L));
 		assertThat(r2.getNum(), is(2L));
@@ -24,21 +24,21 @@ public class TestRational {
 		assertThat(r4.getNum(), is(2L));
 		assertThat(r4.getDen(), is(3L));
 	}
-	
+
 	@Test
-	public void testArrayRational() {
+	public void testArrayReader() {
 		// 配列による定義が正常か確認
 		// 配列の大きさが1,2,3のときそれぞれについてテスト
 		long[] arr1 = {4L};
-		Rational r1 = Rational.arrayRational(arr1);
+		Rational r1 = Rational.arrayReader(arr1);
 		assertThat(r1, is(new Rational(4)));
-		
+
 		long[] arr2 = {1L,2L};
-		Rational r2 = Rational.arrayRational(arr2);
+		Rational r2 = Rational.arrayReader(arr2);
 		assertThat(r2, is(new Rational(1, 2)));
-		
+
 		long[] arr3 = {1L,2L,3L};
-		Rational r3 = Rational.arrayRational(arr3);
+		Rational r3 = Rational.arrayReader(arr3);
 		assertThat(r3, is(new Rational(1, 2)));
 	}
 
@@ -101,15 +101,15 @@ public class TestRational {
 		Rational r1 = new Rational(1, 2);
 		Rational r2 = new Rational(1, 3);
 		assertThat(r1.add(r2), is(new Rational(5, 6)));
-		
+
 		Rational r3 = new Rational(1, 2);
 		Rational r4 = new Rational(-1, 3);
 		assertThat(r3.add(r4), is(new Rational(1, 6)));
-		
+
 		Rational r5 = new Rational(-1, 2);
 		Rational r6 = new Rational(1, 3);
 		assertThat(r5.add(r6), is(new Rational(-1, 6)));
-		
+
 		Rational r7 = new Rational(-1, 2);
 		Rational r8 = new Rational(-1, 3);
 		assertThat(r7.add(r8), is(new Rational(-5, 6)));
@@ -118,19 +118,19 @@ public class TestRational {
 	@Test
 	public void testSubtract(){
 		// 減算処理の確認
-		// 正-正、正-負、負-正、負-負のそれぞれについてテスト		
+		// 正-正、正-負、負-正、負-負のそれぞれについてテスト
 		Rational r1 = new Rational(1, 2);
 		Rational r2 = new Rational(1, 3);
 		assertThat(r1.subtract(r2), is(new Rational(1, 6)));
-		
+
 		Rational r3 = new Rational(1, 2);
 		Rational r4 = new Rational(-1, 3);
 		assertThat(r3.subtract(r4), is(new Rational(5, 6)));
-		
+
 		Rational r5 = new Rational(-1, 2);
 		Rational r6 = new Rational(1, 3);
 		assertThat(r5.subtract(r6), is(new Rational(-5, 6)));
-		
+
 		Rational r7 = new Rational(-1, 2);
 		Rational r8 = new Rational(-1, 3);
 		assertThat(r7.subtract(r8), is(new Rational(-1, 6)));
@@ -139,19 +139,19 @@ public class TestRational {
 	@Test
 	public void testMultiple(){
 		// 乗算処理の確認
-		// 正×正、正×負、負×正、負×負のそれぞれについてテスト		
+		// 正×正、正×負、負×正、負×負のそれぞれについてテスト
 		Rational r1 = new Rational(1, 2);
 		Rational r2 = new Rational(1, 3);
 		assertThat(r1.multiply(r2), is(new Rational(1, 6)));
-		
+
 		Rational r3 = new Rational(1, 2);
 		Rational r4 = new Rational(-1, 3);
 		assertThat(r3.multiply(r4), is(new Rational(-1, 6)));
-		
+
 		Rational r5 = new Rational(-1, 2);
 		Rational r6 = new Rational(1, 3);
 		assertThat(r5.multiply(r6), is(new Rational(-1, 6)));
-		
+
 		Rational r7 = new Rational(-1, 2);
 		Rational r8 = new Rational(-1, 3);
 		assertThat(r7.multiply(r8), is(new Rational(1, 6)));
@@ -165,24 +165,24 @@ public class TestRational {
 		Rational r1 = new Rational(1, 2);
 		Rational r2 = new Rational(1, 3);
 		assertThat(r1.devide(r2), is(new Rational(3, 2)));
-		
+
 		Rational r3 = new Rational(1, 2);
 		Rational r4 = new Rational(-1, 3);
 		assertThat(r3.devide(r4), is(new Rational(-3, 2)));
-		
+
 		Rational r5 = new Rational(-1, 2);
 		Rational r6 = new Rational(1, 3);
 		assertThat(r5.devide(r6), is(new Rational(-3, 2)));
-		
+
 		Rational r7 = new Rational(-1, 2);
 		Rational r8 = new Rational(-1, 3);
 		assertThat(r7.devide(r8), is(new Rational(3, 2)));
-		
+
 		Rational r9 = new Rational(1, 2);
 		Rational r10= new Rational(0, 2);
 		assertThat(r9.devide(r10), nullValue());
 	}
-	
+
 	@Test
 	public void testInverse(){
 		// 逆数の確認
@@ -195,7 +195,7 @@ public class TestRational {
 		assertThat(r2.inverse(), nullValue());
 		assertThat(r3.inverse(), is(new Rational(-2, 1)));
 	}
-	
+
 	@Test
 	public void testPower(){
 		// n乗のテスト
@@ -205,7 +205,7 @@ public class TestRational {
 		assertThat(r1.power(5), is(new Rational(32, 243)));
 		assertThat(r1.power(0), is(new Rational(1, 1)));
 		assertThat(r1.power(-5), is(new Rational(243, 32)));
-		
+
 		Rational r2 = new Rational(-2, 3);
 		assertThat(r2.power(5), is(new Rational(-32, 243)));
 		assertThat(r2.power(0), is(new Rational(1, 1)));
@@ -221,7 +221,7 @@ public class TestRational {
 		Rational r2 = new Rational(1, 2);
 		assertThat(r1.greaterThan(r2), is(true));
 		assertThat(r2.greaterThan(r1), is(false));
-		
+
 		Rational r3 = new Rational(3, 4);
 		Rational r4 = new Rational(-1, 2);
 		assertThat(r3.greaterThan(r4), is(true));
@@ -231,7 +231,7 @@ public class TestRational {
 		Rational r6 = new Rational(-3, 4);
 		assertThat(r5.greaterThan(r6), is(true));
 		assertThat(r6.greaterThan(r5), is(false));
-		
+
 		Rational r7 = new Rational(1, 2);
 		Rational r8 = new Rational(1, 2);
 		assertThat(r7.greaterThan(r8), is(false));
@@ -261,7 +261,7 @@ public class TestRational {
 		Rational r8 = new Rational(1, 2);
 		assertThat(r7.lessThan(r8), is(false));
 	}
-	
+
 	@Test
 	public void testToString(){
 		// 文字列出力の確認
