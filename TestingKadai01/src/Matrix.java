@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Matrix {
 	private int				coreRow;	// 必要行数
 	private int				coreCol;	// 必要列数
@@ -18,23 +20,35 @@ public class Matrix {
 
 	// ========== getter,setter ===========
 	public Rational getRowColElem(int row, int col) {
-		return elem[row][col];
+		return elem[row][col].clone();
+	}
+
+	public void setRowColElem(int row, int col, Rational r) {
+		if((row < 0) || (nRow <= row)){
+			return;
+		}
+
+		if((col < 0) || (nCol <= col)){
+			return;
+		}
+
+		elem[row][col] = r;
 	}
 
 	public Rational[] getRowElem(int row) {
-		return elem[row];
+		return Arrays.copyOf(elem[row], elem[row].length);
 	}
 
 	public Rational[] getColElem(int col) {
 		Rational[] temp = new Rational[nRow];
 		for (int j = 0; j < nRow; j++) {
-			temp[j] = elem[j][col];
+			temp[j] = elem[j][col].clone();
 		}
 		return temp;
 	}
 
 	public Rational[][] getElem() {
-		return elem;
+		return Arrays.copyOf(elem, elem.length);
 	}
 
 	public int getNRow() {
@@ -46,7 +60,10 @@ public class Matrix {
 	}
 
 	public void setRowElem(int row, Rational[] v) {
-		elem[row] = v;
+		if((row < 0) || (nRow <= row)){
+			return;
+		}
+		elem[row] = Arrays.copyOf(v, v.length);
 	}
 
 	public int getOrgCol(int col) {
@@ -69,7 +86,7 @@ public class Matrix {
 		}
 		for (int i = 0; i < nRow; i++) {
 			for (int j = 0; j < nCol; j++) {
-				if (elem[i][j] != m.getRowColElem(i, j)) {
+				if (!elem[i][j].equals(m.getRowColElem(i, j))) {
 					return false;
 				}
 			}
@@ -78,11 +95,11 @@ public class Matrix {
 	}
 
 	@Override
-	protected Object clone() {
+	protected Matrix clone() {
 		Rational[][] elem = new Rational[nRow][nCol];
 		for (int i = 0; i < nRow; i++) {
 			for (int j = 0; j < nCol; j++) {
-				elem[i][j] = this.elem[i][j];
+				elem[i][j] = this.elem[i][j].clone();
 			}
 		}
 		return new Matrix(elem);
@@ -139,7 +156,7 @@ public class Matrix {
 		Rational[][] elem = new Rational[nRow][nCol];
 		for (int i = 0; i < nRow; i++) {
 			for (int j = 0; j < nCol; j++) {
-				elem[i][j] = this.elem[i][j].add(m.getRowColElem(i, j));
+				elem[i][j] = this.elem[i][j].add(m.getRowColElem(i, j)).clone();
 			}
 		}
 		return new Matrix(elem);
@@ -156,7 +173,7 @@ public class Matrix {
 		Rational[][] elem = new Rational[nRow][nCol];
 		for (int i = 0; i < nRow; i++) {
 			for (int j = 0; j < nCol; j++) {
-				elem[i][j] = this.elem[i][j].subtract(m.getRowColElem(i, j));
+				elem[i][j] = this.elem[i][j].subtract(m.getRowColElem(i, j)).clone();
 			}
 		}
 
@@ -174,7 +191,7 @@ public class Matrix {
 				elem[i][j] = new Rational(0);
 				for (int k = 0; k < nCol; k++) {
 					elem[i][j] = elem[i][j].add(this.elem[i][k].multiply(m
-							.getRowColElem(k, j)));
+							.getRowColElem(k, j))).clone();
 				}
 			}
 		}
@@ -185,7 +202,7 @@ public class Matrix {
 		Rational[][] elem = new Rational[nRow][nCol];
 		for (int i = 0; i < nRow; i++) {
 			for (int j = 0; j < nCol; j++) {
-				elem[i][j] = this.elem[i][j].multiply(r);
+				elem[i][j] = this.elem[i][j].multiply(r).clone();
 			}
 		}
 		return new Matrix(elem);
@@ -301,15 +318,69 @@ public class Matrix {
 			return;
 		}
 
-		Rational[] tempElem = elem[col1];
-		elem[col1] = elem[col2];
-		elem[col2] = tempElem;
-
+		for(int i = 0;i < nRow;i++){
+			Rational tempElem = elem[i][col1];
+			elem[i][col1] = elem[i][col2];
+			elem[i][col2] = tempElem;
+		}
 		int tempOrgCol = orgCol[col1];
 		orgCol[col1] = orgCol[col2];
 		orgCol[col2] = tempOrgCol;
 	}
 
+	// =========== 部分行列処理 ==========
+	public Matrix leftUpperMatrix(int row, int col){
+		if(row > nRow){
+			row = nRow;
+		}
+		if(col > nCol){
+			col = nCol;
+		}
+
+		Rational[][] elem = new Rational[row][col];
+		for(int i = 0;i < row;i++){
+			for(int j = 0;j < col;j++){
+				elem[i][j] = this.elem[i][j].clone();
+			}
+		}
+
+		return new Matrix(elem);
+	}
 
 
+	public Matrix rightLowerMatrix(int row, int col){
+		if(row > nRow){
+			row = nRow;
+		}
+		if(col > nCol){
+			col = nCol;
+		}
+
+		Rational[][] elem = new Rational[row][col];
+		int indexRow = nRow - row;
+		int indexCol = nCol - col;
+		for(int i = 0;i < row;i++){
+			for(int j = 0;j < col;j++){
+				elem[i][j] = this.elem[i + indexRow][j + indexCol].clone();
+			}
+		}
+
+		return new Matrix(elem);
+	}
+
+	public void replaceSubMatrix(int row, int col, Matrix m){
+		if(row > nRow){
+			return;
+		}
+
+		if(col > nCol){
+			return;
+		}
+
+		for(int i = 0;i < nRow - row;i++){
+			for(int j = 0;j < nCol - col;j++){
+				elem[row + i][col + j] = m.getRowColElem(i, j).clone();
+			}
+		}
+	}
 }
