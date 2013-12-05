@@ -6,8 +6,9 @@
 *.ear
 
 # eclipse settings
-.classpath
-.settings/
+#.classpath
+#.project
+#.settings/
 
 # Java class files
 *.class
