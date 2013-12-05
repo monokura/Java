@@ -13,6 +13,17 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>struts</groupId>
+			<artifactId>struts</artifactId>
+			<version>1.2.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>webchat</finalName>
@@ -26,6 +37,45 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<configuration>
+					<server>tomcat</server>
+					<url>
+						<a href="http://localhost:8080/manager</url>" target="_blank"
+							rel="noreferrer" style="cursor:help;display:inline !important;">http://localhost:8080/manager
+					</url>
+				</a>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots />
+			<id>Maven Snapshots</id>
+			<url><a href="http://snapshots.maven.codehaus.org/maven2/</url>"
+				target="_blank" rel="noreferrer" style="cursor:help;display:inline !important;">http://snapshots.maven.codehaus.org/maven2/</url>
+		</a>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots />
+			<id>Maven Snapshots</id>
+			<url><a href="http://snapshots.maven.codehaus.org/maven2/</url>"
+				target="_blank" rel="noreferrer" style="cursor:help;display:inline !important;">http://snapshots.maven.codehaus.org/maven2/</url>
+		</a>
+		</pluginRepository>
+	</pluginRepositories>
+
 </project>
