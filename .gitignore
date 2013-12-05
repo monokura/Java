@@ -7,7 +7,6 @@
 
 # eclipse settings
 .classpath
-.project
 .settings/
 
 # Java class files
