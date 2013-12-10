@@ -37,22 +37,20 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
+			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<configuration>
 					<server>tomcat</server>
-					<url>
-						<a href="http://localhost:8080/manager</url>" target="_blank"
-							rel="noreferrer" style="cursor:help;display:inline !important;">http://localhost:8080/manager
-					</url>
-				</a>
+					<url>http://localhost:50000/manager</url>
 				</configuration>
 			</plugin>
+			-->
 		</plugins>
 	</build>
-
+<!--
 	<repositories>
 		<repository>
 			<releases>
@@ -60,9 +58,7 @@
 			</releases>
 			<snapshots />
 			<id>Maven Snapshots</id>
-			<url><a href="http://snapshots.maven.codehaus.org/maven2/</url>"
-				target="_blank" rel="noreferrer" style="cursor:help;display:inline !important;">http://snapshots.maven.codehaus.org/maven2/</url>
-		</a>
+			<url>http://snapshots.maven.codehaus.org/maven2/</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -72,10 +68,8 @@
 			</releases>
 			<snapshots />
 			<id>Maven Snapshots</id>
-			<url><a href="http://snapshots.maven.codehaus.org/maven2/</url>"
-				target="_blank" rel="noreferrer" style="cursor:help;display:inline !important;">http://snapshots.maven.codehaus.org/maven2/</url>
-		</a>
+			<url>http://snapshots.maven.codehaus.org/maven2/</url>
 		</pluginRepository>
 	</pluginRepositories>
-
+-->
 </project>

@@ -2,6 +2,8 @@ package com.example.webchat.db.bean;
 
 import java.util.Date;
 
+
+
 public class MessageBean {
 	// 発言日時
 	private Date date = null;
@@ -12,7 +14,7 @@ public class MessageBean {
 	// 発言内容
 	private String message = null;
 
-	MessageBean(Date date, String name, String message){
+	public MessageBean(Date date, String name, String message) {
 		this.date = date;
 		this.name = name;
 		this.message = message;

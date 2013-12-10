@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="Windows-31J" ?>
+<!DOCTYPE struts-config PUBLIC
+  "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+  "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="MessageForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="name" type="java.lang.String" />
+			<form-property name="message" type="java.lang.String" />
+		</form-bean>
+	</form-beans>
+
+	<action-mappings>
+		<action path="/ShowMessages"
+			type="com.example.webchat.webapp.struts.action.ShowMessagesAction">
+			<forward name="success" path="/WEB-INF/jsp/ShowMessages.jsp" />
+		</action>
+
+		<action path="/SaveMessage" name="MessageForm" input="/ShowMessages.jsp"
+			type="com.example.webchat.webapp.struts.action.SaveMessageAction">
+			<forward name="success" path="/ShowMessages.do" />
+		</action>
+	</action-mappings>
+
+	<message-resources parameter="com.example.webchat.webapp.struts.Messages" />
+</struts-config>
