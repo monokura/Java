@@ -599,25 +599,20 @@ public class MatrixTest {
 				{{5,1},{6,1},{7,1},{8,1}},
 		};
 		long[][][] array2 = {
-				{{0,1},{1,1},{2,1},{3,1}},
-				{{5,1},{6,1},{7,1},{8,1}},
+				{{2,1},{3,1}},
+				{{7,1},{8,1}},
 		};
 		long[][][] array3 = {
-				{{3,1},{4,1}},
-				{{2,1},{3,1}},
-				{{7,1},{8,1}},
-		};
-		long[][][] array4 = {
-				{{2,1},{3,1}},
-				{{7,1},{8,1}},
+				{{2,1},{3,1},{4,1}},
+				{{1,1},{2,1},{3,1}},
+				{{6,1},{7,1},{8,1}},
 		};
 		Matrix mat1 = Matrix.arrayReader(array1);
 		Matrix mat2 = Matrix.arrayReader(array2);
 		Matrix mat3 = Matrix.arrayReader(array3);
-		Matrix mat4 = Matrix.arrayReader(array4);
-		assertThat(mat1.rightLowerMatrix(2, 5), is(mat2));
-		assertThat(mat1.rightLowerMatrix(5, 2), is(mat3));
-		assertThat(mat1.rightLowerMatrix(2, 2), is(mat4));
+		assertThat(mat1.rightLowerMatrix(1, 2), is(mat2));
+		assertThat(mat1.rightLowerMatrix(5, 2), nullValue());
+		assertThat(mat1.rightLowerMatrix(0, 1), is(mat3));
 	}
 
 	@Test
@@ -652,5 +647,118 @@ public class MatrixTest {
 		mat1b.replaceSubMatrix(2, 2, mat2);
 		assertThat(mat1a, is(mat3));
 		assertThat(mat1b, is(mat4));
+	}
+
+	@Test
+	public void testEliminate(){
+		long[][][] array = {
+				{{0,1},{1,1},{1,1},{2,1},{3,1}},
+				{{0,1},{2,1},{2,1},{4,1},{6,1}},
+				{{0,1},{-2,1},{-2,1},{0,1},{2,1}},
+		};
+
+		long[][][] array2 = {
+				{{0,1},{0,1},{0,1},{0,1},{0,1}},
+				{{0,1},{1,1},{1,1},{2,1},{3,1}},
+				{{0,1},{0,1},{0,1},{4,1},{8,1}},
+		};
+
+		Matrix mat = Matrix.arrayReader(array);
+		Matrix answer = mat.clone();
+		mat.eliminate(0, 0);
+		assertThat(true, is(mat.equals(answer)));
+		mat.eliminate(1, 1);
+		answer = Matrix.arrayReader(array2);
+		assertThat(true, is(mat.equals(answer)));
+	}
+
+	@Test
+	public void testEchelonForm(){
+		long[][][] array = {
+				{{0,1},{1,1},{1,1},{2,1},{3,1}},
+				{{0,1},{2,1},{2,1},{4,1},{6,1}},
+				{{0,1},{-2,1},{-2,1},{0,1},{2,1}},
+		};
+
+		long[][][] array2 = {
+				{{0,1},{1,1},{1,1},{2,1},{3,1}},
+				{{0,1},{0,1},{0,1},{1,1},{2,1}},
+				{{0,1},{0,1},{0,1},{0,1},{0,1}},
+		};
+
+		Matrix mat = Matrix.arrayReader(array);
+		Matrix answer = Matrix.arrayReader(array2);
+		mat.echelonForm();
+		assertThat(mat.equals(answer), is(true));
+	}
+
+	@Test
+	public void testEchelonForm2(){
+		long[][][] array = {
+				{{0,1},{1,1},{1,1}},
+				{{0,1},{2,1},{0,1}},
+				{{0,1},{1,1},{5,1}},
+				{{0,1},{-8,1},{2,1}},
+				{{0,1},{15,1},{12,1}},
+		};
+		long[][][] array2 = {
+				{{0,1},{1,1},{1,1}},
+				{{0,1},{0,1},{1,1}},
+				{{0,1},{0,1},{0,1}},
+				{{0,1},{0,1},{0,1}},
+				{{0,1},{0,1},{0,1}},
+		};
+		Matrix mat = Matrix.arrayReader(array);
+		Matrix answer = Matrix.arrayReader(array2);
+		mat.echelonForm();
+		assertThat(mat.equals(answer), is(true));
+	}
+
+	@Test
+	public void testRebuiltForm(){
+		long[][][] array = {
+				{{0,1},{1,1},{1,1},{2,1},{3,1}},
+				{{0,1},{2,1},{2,1},{4,1},{6,1}},
+				{{0,1},{-2,1},{-2,1},{0,1},{2,1}},
+		};
+		long[][][] array2 = {
+				{{1,1},{2,1},{1,1},{3,1},{0,1}},
+				{{0,1},{1,1},{0,1},{2,1},{0,1}},
+				{{0,1},{0,1},{0,1},{0,1},{0,1}},
+		};
+		Matrix mat = Matrix.arrayReader(array);
+		Matrix answer = Matrix.arrayReader(array2);
+		mat.echelonForm();
+		mat.rebuiltForm();
+		assertThat(mat.equals(answer), is(true));
+		assertThat(mat.getCoreRow(), is(2));
+		assertThat(mat.getCoreCol(), is(4));
+
+		// 元の位置との関係は[1,3,2,4,0]の対応
+		assertThat(mat.getOrgCol(0), is(1));
+		assertThat(mat.getOrgCol(1), is(3));
+		assertThat(mat.getOrgCol(2), is(2));
+		assertThat(mat.getOrgCol(3), is(4));
+		assertThat(mat.getOrgCol(4), is(0));
+	}
+
+	@Test
+	public void testLeftIdentityForm(){
+		long[][][] array = {
+				{{0,1},{1,1},{1,1},{2,1},{3,1}},
+				{{0,1},{2,1},{2,1},{4,1},{6,1}},
+				{{0,1},{-2,1},{-2,1},{0,1},{2,1}},
+		};
+		long[][][] array2 = {
+				{{1,1},{0,1},{1,1},{-1,1},{0,1}},
+				{{0,1},{1,1},{0,1},{2,1},{0,1}},
+				{{0,1},{0,1},{0,1},{0,1},{0,1}},
+		};
+		Matrix mat = Matrix.arrayReader(array);
+		Matrix answer = Matrix.arrayReader(array2);
+		mat.echelonForm();
+		mat.rebuiltForm();
+		mat.leftIdentityForm();
+		assertThat(mat.equals(answer), is(true));
 	}
 }

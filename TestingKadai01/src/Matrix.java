@@ -1,19 +1,19 @@
 import java.util.Arrays;
 
 public class Matrix {
-	private int				coreRow;	// 必要行数
-	private int				coreCol;	// 必要列数
-	private Rational[][]	elem;		// 要素
-	private int				nRow;		// 行数
-	private int				nCol;		// 列数
-	private int[]			orgCol;	// 各列に対する当初の列番号の配列
+	private int coreRow; // 必要行数
+	private int coreCol; // 必要列数
+	private Rational[][] elem; // 要素
+	private int nRow; // 行数
+	private int nCol; // 列数
+	private int[] orgCol; // 各列に対する当初の列番号の配列
 
 	Matrix(Rational[][] elem) {
 		this.elem = elem;
 		this.nRow = elem.length;
 		this.nCol = elem[0].length;
 		orgCol = new int[nCol];
-		for(int i = 0;i < nCol;i++){
+		for (int i = 0; i < nCol; i++) {
 			orgCol[i] = i;
 		}
 	}
@@ -24,11 +24,11 @@ public class Matrix {
 	}
 
 	public void setRowColElem(int row, int col, Rational r) {
-		if((row < 0) || (nRow <= row)){
+		if ((row < 0) || (nRow <= row)) {
 			return;
 		}
 
-		if((col < 0) || (nCol <= col)){
+		if ((col < 0) || (nCol <= col)) {
 			return;
 		}
 
@@ -59,8 +59,17 @@ public class Matrix {
 		return nCol;
 	}
 
+	public void setColElem(int col, Rational[] v) {
+		if ((col < 0) || (nCol <= col)) {
+			return;
+		}
+		for (int i = 0; i < nRow; i++) {
+			this.elem[i][col] = v[i].clone();
+		}
+	}
+
 	public void setRowElem(int row, Rational[] v) {
-		if((row < 0) || (nRow <= row)){
+		if ((row < 0) || (nRow <= row)) {
 			return;
 		}
 		elem[row] = Arrays.copyOf(v, v.length);
@@ -68,6 +77,18 @@ public class Matrix {
 
 	public int getOrgCol(int col) {
 		return orgCol[col];
+	}
+
+	public void setOrgCol(int col, int value) {
+		this.orgCol[col] = value;
+	}
+
+	public int getCoreRow() {
+		return coreRow;
+	}
+
+	public int getCoreCol() {
+		return coreCol;
 	}
 
 	// ============ 継承 ==============
@@ -318,7 +339,7 @@ public class Matrix {
 			return;
 		}
 
-		for(int i = 0;i < nRow;i++){
+		for (int i = 0; i < nRow; i++) {
 			Rational tempElem = elem[i][col1];
 			elem[i][col1] = elem[i][col2];
 			elem[i][col2] = tempElem;
@@ -329,17 +350,17 @@ public class Matrix {
 	}
 
 	// =========== 部分行列処理 ==========
-	public Matrix leftUpperMatrix(int row, int col){
-		if(row > nRow){
+	public Matrix leftUpperMatrix(int row, int col) {
+		if (row > nRow) {
 			row = nRow;
 		}
-		if(col > nCol){
+		if (col > nCol) {
 			col = nCol;
 		}
 
 		Rational[][] elem = new Rational[row][col];
-		for(int i = 0;i < row;i++){
-			for(int j = 0;j < col;j++){
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
 				elem[i][j] = this.elem[i][j].clone();
 			}
 		}
@@ -347,39 +368,151 @@ public class Matrix {
 		return new Matrix(elem);
 	}
 
-
-	public Matrix rightLowerMatrix(int row, int col){
-		if(row > nRow){
-			row = nRow;
+	public Matrix rightLowerMatrix(int row, int col) {
+		if (row >= nRow) {
+			return null;
 		}
-		if(col > nCol){
-			col = nCol;
+		if (col >= nCol) {
+			return null;
 		}
 
-		Rational[][] elem = new Rational[row][col];
-		int indexRow = nRow - row;
-		int indexCol = nCol - col;
-		for(int i = 0;i < row;i++){
-			for(int j = 0;j < col;j++){
-				elem[i][j] = this.elem[i + indexRow][j + indexCol].clone();
+		Rational[][] elem = new Rational[nRow - row][nCol - col];
+		for (int i = 0; i < nRow - row; i++) {
+			for (int j = 0; j < nCol - col; j++) {
+				elem[i][j] = this.elem[i + row][j + col].clone();
 			}
 		}
-
 		return new Matrix(elem);
 	}
 
-	public void replaceSubMatrix(int row, int col, Matrix m){
-		if(row > nRow){
+	public void replaceSubMatrix(int row, int col, Matrix m) {
+		if (row > nRow) {
 			return;
 		}
 
-		if(col > nCol){
+		if (col > nCol) {
 			return;
 		}
 
-		for(int i = 0;i < nRow - row;i++){
-			for(int j = 0;j < nCol - col;j++){
+		for (int i = 0; i < nRow - row; i++) {
+			for (int j = 0; j < nCol - col; j++) {
 				elem[row + i][col + j] = m.getRowColElem(i, j).clone();
+			}
+		}
+	}
+
+	// ============ ここから5章の内容 =============
+	public void eliminate(int row, int col) {
+		if (this.elem[row][col].equals(new Rational(0))) {
+			return;
+		}
+		multiplyRow(row, this.elem[row][col].inverse());
+
+		for (int i = 0; i < this.nRow; i++) {
+			if (i == row) {
+				continue;
+			}
+			addMultipliedRow(row, this.elem[i][col].multiply(new Rational(-1)), i);
+		}
+	}
+
+	public void echelonForm() {
+		if (this.nRow == 1) {
+			return;
+		}
+
+		if (this.elem[0][0].equals(new Rational(0))) {
+			// 左上要素が0の場合
+			for (int i = 0; i < this.nRow; i++) {
+				if (!this.elem[i][0].equals(new Rational(0))) {
+					// i行0列要素が0でないなら入れ替え
+					exchangeRow(0, i);
+					echelonForm();
+					return;
+				}
+				// 0列目のすべての要素が0
+				if (this.nCol == 1) {
+					// 一列しかないなら終了
+					return;
+				} else {
+					// 一番左の列以外の部分行列について同様の処理をして置換
+					Matrix m = this.rightLowerMatrix(0, 1);
+					if (m != null) {
+						m.echelonForm();
+						replaceSubMatrix(0, 1, m);
+					}
+				}
+			}
+		} else {
+			// 左上要素が0ではない場合
+			eliminate(0, 0);
+			Matrix m = this.rightLowerMatrix(1, 1);
+			if (m != null) {
+				m.echelonForm();
+				replaceSubMatrix(1, 1, m);
+			}
+		}
+	}
+
+	public void rebuiltForm() {
+		Matrix tempMat = this.clone();
+		int[] colClasses = new int[this.nCol];
+
+		// 各列を分類
+		// 1.基底変数に対応する列:仕様書の(2)
+		// 2.非基底変数に対応する列:仕様書の(3)
+		// 3.すべての要素が0となる列:仕様書の(1)
+		// に分類
+		// for文の都合上仕様書と少し変更
+		int counter = 0;
+		this.coreRow = 0;
+		this.coreCol = 0;
+		for (int i = 0; i < this.nCol; i++) {
+			if (nonZeroRow(i) == -1) {
+				colClasses[i] = 3;
+			} else if (nonZeroRow(i) == counter) {
+				colClasses[i] = 1;
+				this.coreRow++;
+				this.coreCol++;
+				counter++;
+			} else {
+				colClasses[i] = 2;
+				this.coreCol++;
+			}
+		}
+
+		// 分類に従って入れ替え
+		int col = 0;
+		for (int cl = 1; cl <= 3; cl++) {
+			for (int i = 0; i < this.nCol; i++) {
+				if (colClasses[i] == cl) {
+					this.setColElem(col, tempMat.getColElem(i));
+					this.setOrgCol(col, tempMat.getOrgCol(i));
+					col++;
+				}
+			}
+		}
+
+	}
+
+	private int nonZeroRow(int col) {
+		int result = -1;
+		for (int i = 0; i < nRow; i++) {
+			if (!this.elem[i][col].equals(new Rational(0))) {
+				result = i;
+			}
+		}
+		return result;
+	}
+
+	public void leftIdentityForm() {
+		// 左方正方行列の対角成分を1に
+		multiplyRow(coreRow - 1, this.elem[coreRow - 1][coreRow - 1].inverse());
+
+		// 対角成分以外を0に
+		for (int i = coreRow - 1; i > 0; i--) {
+			for (int j = 0; j < i; j++) {
+				addMultipliedRow(i, this.elem[j][i].multiply(new Rational(-1)), j);
 			}
 		}
 	}
