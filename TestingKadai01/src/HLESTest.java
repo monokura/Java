@@ -105,10 +105,6 @@ public class HLESTest {
 		Rational[] result = mat.substVector(x);
 		Rational zero = new Rational(0);
 
-		for(int i = 0;i < x.length;i++){
-			System.out.println(x[i]);
-		}
-
 		for(int i = 0;i < result.length;i++){
 			assertThat(result[i].equals(zero), is(true));
 		}

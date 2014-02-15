@@ -91,6 +91,14 @@ public class Matrix {
 		return coreCol;
 	}
 
+	public void setCoreRow(int coreRow) {
+		this.coreRow = coreRow;
+	}
+
+	public void setCoreCol(int coreCol) {
+		this.coreCol = coreCol;
+	}
+
 	// ============ 継承 ==============
 
 	@Override
@@ -430,17 +438,17 @@ public class Matrix {
 					echelonForm();
 					return;
 				}
-				// 0列目のすべての要素が0
-				if (this.nCol == 1) {
-					// 一列しかないなら終了
-					return;
-				} else {
-					// 一番左の列以外の部分行列について同様の処理をして置換
-					Matrix m = this.rightLowerMatrix(0, 1);
-					if (m != null) {
-						m.echelonForm();
-						replaceSubMatrix(0, 1, m);
-					}
+			}
+			// 0列目のすべての要素が0
+			if (this.nCol == 1) {
+				// 一列しかないなら終了
+				return;
+			} else {
+				// 一番左の列以外の部分行列について同様の処理をして置換
+				Matrix m = this.rightLowerMatrix(0, 1);
+				if (m != null) {
+					m.echelonForm();
+					replaceSubMatrix(0, 1, m);
 				}
 			}
 		} else {
@@ -515,5 +523,59 @@ public class Matrix {
 				addMultipliedRow(i, this.elem[j][i].multiply(new Rational(-1)), j);
 			}
 		}
+	}
+
+	public Matrix concatVector(Rational[] v){
+		Rational[][] result = new Rational[nRow][nCol+1];
+
+		for(int i = 0;i < nRow;i++){
+			for(int j = 0;j < nCol;j++){
+				result[i][j] = this.elem[i][j].clone();
+			}
+
+			// 一番右の要素はvの値を代入
+			if(i < v.length){
+				result[i][nCol] = v[i].clone();
+			}else{
+				result[i][nCol] = new Rational(0);
+			}
+		}
+
+		return new Matrix(result);
+	}
+
+	public Matrix inverse(){
+		// 正方行列チェック
+		if(nRow != nCol){
+			return null;
+		}
+
+		Rational[][] temp = new Rational[nRow][nCol];
+
+		for(int i = 0;i < nRow;i++){
+			Rational[] b = new Rational[nRow];
+			for(int j = 0;j < nRow;j++){
+				if(i == j){
+					b[j] = new Rational(1);
+				}else{
+					b[j] = new Rational(0);
+				}
+			}
+
+			LES les = new LES(this, b);
+
+			// 線形方程式が不能な場合は逆行列なしと見なしnull
+			if(les.solve() == 0){
+				return null;
+			}else{
+				Rational[] x = les.getX();
+				for(int j = 0;j < nRow;j++){
+				temp[j][i] = x[j];
+				}
+			}
+		}
+
+		Matrix inverseMat = new Matrix(temp);
+		return inverseMat;
 	}
 }
