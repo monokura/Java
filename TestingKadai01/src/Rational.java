@@ -151,6 +151,11 @@ public class Rational extends Object {
 	}
 
 	boolean greaterThan(Rational r) {
+		if(r.equals(new Rational(Long.MAX_VALUE))){
+			// 無限大より必ず小さい
+			return false;
+		}
+
 		if (this.num * r.den - this.den * r.num > 0) {
 			return true;
 		} else {
@@ -159,6 +164,11 @@ public class Rational extends Object {
 	}
 
 	boolean lessThan(Rational r) {
+		if(r.equals(new Rational(-Long.MAX_VALUE))){
+			// 無限小より必ず大きい
+			return false;
+		}
+
 		if (this.num * r.den - this.den * r.num < 0) {
 			return true;
 		} else {
