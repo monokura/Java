@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="シンプル・アクション・セット"
+            visible="true"
+            id="HelloPlugin.actionSet">
+         <menu
+               label="シンプル・メニュー(&amp;M)"
+               id="simpleMenu">
+            <separator
+                  name="simpleGroup">
+            </separator>
+         </menu>
+         <action
+               label="シンプル・アクション(&amp;S)"
+               icon="icons/textedit.png"
+               class="helloplugin.actions.SimpleAction"
+               tooltip="はじめてのプラグイン"
+               menubarPath="simpleMenu/simpleGroup"
+               toolbarPath="simpleGroup"
+               id="helloplugin.actions.SimpleAction">
+         </action>
+         <action
+               class="helloplugin.actions.YNAction"
+               icon="icons/spotify.png"
+               id="HelloPlugin.YNAction"
+               label="Y-Nアクション"
+               menubarPath="simpleMenu/simpleGroup"
+               style="push"
+               toolbarPath="simpleGroup"
+               tooltip="Yes/Noダイアログ">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Custom View"
+            id="CustomView">
+      </category>
+      <view
+            name="簡単なビュー"
+            icon="icons/sample.gif"
+            category="CustomView"
+            class="customview.views.SimpleView"
+            id="customview.views.SimpleView">
+      </view>
+      <view
+            category="CustomView"
+            class="customview.views.ButtonView"
+            id="CustomView.ButtonView"
+            name="ボタンビュー"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+
+</plugin>

@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %plugin_name
+Bundle-SymbolicName: org.eclipse.egit
+Bundle-Version: 2.2.0.201212191850-r
+Bundle-ClassPath: org.eclipse.egit_2.2.0.201212191850-r.jar
+Bundle-Vendor: %provider_name
+Bundle-Localization: plugin
+Created-By: Apache Maven
+Archiver-Version: Plexus Archiver
+Eclipse-SourceReferences: scm:git:https://git.eclipse.org/r/p/egit/egit.git;path="org.eclipse.egit";commitId=408252a942b166e78dbdd8639a85e863a9782a4b
+Built-By: hudsonbuild
+Build-Jdk: 1.6.0_21
+Bundle-ActivationPolicy: lazy

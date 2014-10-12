@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component name="org.eclipse.jdt.junit_3.7.100.v20120523-1543" version="1.2">
+    <plugin id="org.eclipse.jdt.junit_3.7.100.v20120523-1543"/>
+    <package name="org.eclipse.jdt.junit.launcher" visibility="1">
+        <type name="JUnitLaunchConfigurationTab" restrictions="2"/>
+    </package>
+</component>
